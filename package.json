@@ -23,6 +23,7 @@
     "superagent": "^2.3.0",
     "hbs": "^4.0.0",
     "body-parser": "^1.15.2",
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "apiai": "^3.0.2"
   }
 }
