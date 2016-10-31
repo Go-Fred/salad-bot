@@ -18,6 +18,8 @@ var token = jwt.sign({
         }
     });
 
+var port = process.env.PORT || 8080;
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -71,6 +73,6 @@ app.use(function(req, res) {
   res.end();
 });
 
-app.listen(8000, function() {
+app.listen(port, function() {
   console.log("listening on 8000\n\n");
 });
