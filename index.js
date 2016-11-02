@@ -24,7 +24,11 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(function(req, res) {
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+
+app.post('/', function(req, res) {
   const data = JSON.stringify(req.body, null,4);
   //console.log('-->', data);
   //var arr = data.split(",")
