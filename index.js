@@ -29,46 +29,40 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', function(req, res) {
-  const data = JSON.stringify(req.body, null,4);
-  //console.log('-->', data);
-  //var arr = data.split(",")
-  //var text = arr[2].split("text")
-  //var finaltext = text[1].split('"')
-  var user_input = data.split("messages")[1].split("text")[1].split('"')[2]
-  USER_ID = data.split("appUser")[3].split("_id")[1].split('"')[2]
+  //Visualize the JSON
+    //const data = JSON.stringify(req.body, null,4);
+    //console.log('-->', data);
+  //Read the JSON
+    var user_input = req.body.messages[0].text;
+    USER_ID = req.body.appUser.userId;
+    //console.log(user_input);
+    //console.log(USER_ID);
 
-  console.log(user_input);
-//  console.log(data.split("appUser")[3]);
-//  console.log(data.split("appUser")[3].split("_id")[1]);
-  console.log(USER_ID);
-
-  //console.log('-->', data);
-  var request = apiai.textRequest(user_input);
-
-  request.on('response', function(response) {
-    const bot_data =  JSON.stringify(response, null);
-    var bot_output = bot_data.split("fulfillment")[1].split("speech")[1].split('"')[2]
-    //console.log(speech[12]);
-    //var speech2 = speech[12].split("speech")[1].split('"')[2]
-    console.log(bot_output);
-    console.log(token);
-
-
-    postrequest
-      .post('https://api.smooch.io/v1/appusers/' + USER_ID + '/conversation/messages')
-      .send({
-        text: bot_output,
-        role: 'appMaker'
-      })
-      .set('authorization', 'Bearer ' + token)
-      .set('Accept', 'application/json')
-      .end(function(err2, postres) {
-        console.log(err2, postres.body, postres.statusCode);
-    });
-
-
+    var request = apiai.textRequest(user_input, {
+      sessionId: 'bla123'
   });
 
+    request.on('response', function(response) {
+      const bot_data =  JSON.stringify(response, null,4);
+      //console.log(bot_data);
+
+      var bot_output = response.result.fulfillment.messages[0].speech;
+      console.log(bot_output);
+    //  console.log(token);
+
+      postrequest
+        .post('https://api.smooch.io/v1/appusers/' + USER_ID + '/messages')
+        .send({
+          text: bot_output,
+          type: 'text',
+          role: 'appMaker'
+        })
+        .set('authorization', 'Bearer ' + token)
+        .set('Accept', 'application/json')
+        .end(function(err2, postres) {
+          console.log(err2, postres.body, postres.statusCode);
+      });
+    });
   request.on('error', function(error) {
       console.log(error);
   });
@@ -78,5 +72,5 @@ app.post('/', function(req, res) {
 });
 
 app.listen(port, function() {
-  console.log("listening on 8000\n\n");
+  console.log("listening on 8080\n\n");
 });
