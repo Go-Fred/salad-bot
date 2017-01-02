@@ -5,8 +5,8 @@ var apiai = apiai("b2bbc6154ca144ce9f2cf4c3b9d2baf2");
 var postrequest = require('superagent');
 var jwt = require('jsonwebtoken');
 var USER_ID = 'appUser _id';
-var KEY_ID = 'app_5813745f2c3b2627004b4442';
-var SECRET = '47i5ZPYzAD4i_95OxzU070yG';
+var KEY_ID = 'app_585aef59ae4d453300149276';
+var SECRET = '5AsE6vZLBWTD-dnNE5cp914h';
 var token = jwt.sign({
     scope: 'app'
 },
@@ -14,7 +14,7 @@ var token = jwt.sign({
     {
         header: {
             alg: 'HS256',
-            kid: 'app_5813745f2c3b2627004b4442'
+            kid: 'app_585aef59ae4d453300149276'
         }
     });
 
@@ -30,13 +30,13 @@ app.get('/', function(req, res) {
 
 app.post('/', function(req, res) {
   //Visualize the JSON
-    //const data = JSON.stringify(req.body, null,4);
-    //console.log('-->', data);
+    const data = JSON.stringify(req.body, null,4);
+    console.log('-->', data);
   //Read the JSON
     var user_input = req.body.messages[0].text;
-    USER_ID = req.body.appUser.userId;
+    USER_ID = req.body.appUser._id;
     //console.log(user_input);
-    //console.log(USER_ID);
+    console.log(USER_ID);
 
     var request = apiai.textRequest(user_input, {
       sessionId: 'bla123'
